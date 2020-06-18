@@ -1,0 +1,80 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+      <section id='luv-letter-form-section'>
+                <img id='form-dog' src='#' alt='dog'>
+
+
+          <form id='ll-form' method="POST">
+            {% csrf_token %}
+            <div class="row">
+              <div class="col-25">
+                <label for="name">Name</label>
+              </div>
+              <div class="col-75">
+                <input type="text" id="name" name="name" placeholder="Your name (optional)">
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-25">
+                <label for="luv-letter-input">Luv Letter</label>
+              </div>
+              <div class="col-75">
+                <textarea id="luv-letter-input" name="luv-letter-input" placeholder="Write your letter here!" style="height:200px"></textarea>
+              </div>
+            </div>
+            <div class="row">
+              <input id='send-ll-button' type="submit" value="Send">
+            </div>
+        </form>
+
+      </section>
+
+    <script src="/static/js/jquery-2.2.4.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script> 
+      <script type="text/javascript">
+        console.log('connected to luv letter form')
+        
+function displayLuvLetterForm() {
+
+    console.log(localStorage.getItem('currentDog'))
+    document.getElementById('form-dog').src = localStorage.getItem('currentDog');
+
+}
+displayLuvLetterForm()
+
+
+
+
+        $(document).on('submit', '#ll-form',function(e){
+            e.preventDefault();
+            $.ajax({
+                type:'POST',
+                url:'{% url "create_letter" %}',
+                data:{
+                    dog_img_url:window.localStorage.getItem('currentDog'),
+                    author:$('#name').val(),
+                    letter:$('#luv-letter-input').val(),
+                    csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+                    action: 'post'
+                },
+                beforeSend:function(){
+                  $('#send-ll-button').prop('disabled', true); 
+                },
+                success:function(json){
+                    document.getElementById("ll-form").reset();
+                    console.log('submitted letter')
+                    window.localStorage.setItem('currentDog', '')
+                    window.location = "{% url 'approved' %}"
+                },
+                error : function(xhr,errmsg,err) {
+                $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
+                    " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            }
+            });
+        });
+    </script>
+      </script>
+
+{% endblock %}

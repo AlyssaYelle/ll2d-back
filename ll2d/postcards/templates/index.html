@@ -1,0 +1,82 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+      <section id='random-dog-section'>
+        <div class='random-dog-img-container'>
+
+          <img id='random-dog' src='https://images.dog.ceo/breeds/hound-blood/n02088466_7486.jpg' alt='dog'>
+
+                <!-- Loading animation container -->
+          <div class="loading" id='loading-spinner'>
+              <!-- We make this div spin -->
+              <div class="spinner">
+                  <!-- Mask of the quarter of circle -->
+                  <div class="mask">
+                      <!-- Inner masked circle -->
+                      <div class="maskedCircle"></div>
+                  </div>
+              </div>
+          </div>
+        </div>
+
+
+        <div class='ask-about-luv-letter'>
+          <h3>Would you like to write a luv letter to this dog?</h3>
+          <div id='yes-or-no-buttons'>
+            <button ><a href="{% url 'submit' %}">yes</a></button>
+            <button onclick='fetchRandomDog()'>no</button>
+          </div>
+        </div>
+      </section>
+
+      <script type="text/javascript">
+
+console.log('connected')
+
+currentDog = localStorage.getItem('currentDog')
+console.log(currentDog)
+function fetchRandomDog() {
+    console.log('we are here at fetchRandomDog')
+
+    document.getElementById('random-dog').style.display = 'none';
+    fetch('https://dog.ceo/api/breeds/image/random', {
+
+
+    })
+    .then((res) => {
+        return res.json();
+    })
+    .then((res) => {
+        localStorage.setItem('currentDog', res.message);
+        updateDomWithRandomDog(res.message);
+    })
+    .catch((err) => {
+        updateDomWithRandomDog('https://images.dog.ceo/breeds/hound-blood/n02088466_7486.jpg')
+        console.log(err)
+    })
+}
+
+if (currentDog == '') {
+  console.log('calling fetchRandomDog')
+  fetchRandomDog()
+} else {
+  console.log('calling updateDomWithRandomDog')
+  updateDomWithRandomDog(currentDog)
+}
+
+
+
+function updateDomWithRandomDog(dogImgUrl) {
+    console.log('we are here at updateDomWithRandomDog')
+    dogImg = document.getElementById('random-dog');
+    dogImg.src = dogImgUrl;
+    document.getElementById('loading-spinner').style.display = 'none';
+    dogImg.style.display = 'inline';
+
+
+
+}
+      </script>
+
+{% endblock %}

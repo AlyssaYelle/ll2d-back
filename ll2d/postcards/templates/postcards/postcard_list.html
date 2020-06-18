@@ -1,0 +1,26 @@
+{% extends "base_generic.html" %}
+{% load static %}
+
+
+
+{% block content %}
+
+      <section id=postcard-display>
+        {% if postcard_list %}
+          {% for postcard in postcard_list %}
+            <article>
+              <div class='postcard-img-container'>
+                <img class='postcard-img' src={{postcard.dog_img_url}}>
+              </div>
+              <div class='postcard-ll'>
+                <h3 class='postcard-ll-title'>A luv letter from {{postcard.author}}</h3>
+                <p class='postcard-ll-text'>{{postcard.letter}}</p>
+              </div>
+            </article>
+          {% endfor %}
+        {% else %}
+          <p>There are no luv letters yet.</p>
+        {% endif %}
+      </section>
+
+{% endblock %}

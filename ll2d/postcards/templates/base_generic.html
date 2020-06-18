@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% block title %}<title>Luv Letters 2 Dogs</title>{% endblock %}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Reenie+Beanie&display=swap" rel="stylesheet">
+  <!-- Add additional CSS in static file -->
+  {% load static %}
+  <link rel="stylesheet" href="{% static '/css/styles.css' %}">
+</head>
+<body>
+    <header>
+      <div class="dropdown">
+        <button class="dropbtn">Menu</button>
+        <div class="dropdown-content">
+          <a href="{% url 'index' %}"><p id='home-button'>Home</p></a>
+          <a href="{% url 'approved' %}"><p id='postcards-button'>My Luv Letters</p></a>
+        </div>
+      </div>
+      <h1>Luv Letters 2 Dogs</h1>
+      <div id='header-align-helper'></div>
+
+   </header>
+    <div class='page-content-helper-container'>
+      <div class='page-content'>
+        {% block content %}{% endblock %}
+      </div>
+    </div>
+
+
+
+</body>
+</html>
+
+
